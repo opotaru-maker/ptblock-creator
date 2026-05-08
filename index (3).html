@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ptblock • Creator Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap');
+        
+        body { font-family: 'Inter', system_ui, sans-serif; }
+        
+        .replit-dark {
+            background-color: #0f172a;
+        }
+        
+        .replit-blue {
+            color: #3b82f6;
+        }
+        
+        .glass {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        
+        .app-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .app-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        
+        .prompt-input {
+            transition: all 0.2s ease;
+        }
+        
+        .prompt-input:focus {
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        .section-title {
+            font-size: 12px;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body class="replit-dark text-white min-h-screen">
+    <!-- Top Navigation -->
+    <nav class="border-b border-slate-700 px-8 py-5 flex items-center justify-between">
+        <div class="flex items-center gap-x-4">
+            <div class="flex items-center gap-x-3">
+                <div class="w-10 h-10 bg-[#3b82f6] rounded-2xl flex items-center justify-center">
+                    <i class="fa-solid fa-magic text-white text-2xl"></i>
+                </div>
+                <div>
+                    <span class="font-bold text-3xl tracking-tight">ptblock</span>
+                    <span class="text-xs text-[#3b82f6] font-mono tracking-[1.5px] ml-1">CREATOR</span>
+                </div>
+            </div>
+            <div class="px-3 py-1 text-xs bg-emerald-500/10 text-emerald-400 rounded-full font-medium">v2.0 • Powered by Grok</div>
+        </div>
+        
+        <div class="flex items-center gap-x-3">
+            <button onclick="showHistory()" class="px-4 py-2 text-sm hover:bg-slate-800 rounded-xl flex items-center gap-x-2">
+                <i class="fa-solid fa-history"></i>
+                <span>History</span>
+            </button>
+            
+            <div class="flex items-center gap-x-2 text-sm text-slate-400">
+                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                <span>Connected to Grok</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-5xl mx-auto px-8 pt-14">
+        
+        <!-- Hero -->
+        <div class="text-center mb-14">
+            <div class="inline-flex items-center gap-x-2 px-4 py-1 bg-white/5 rounded-full text-sm mb-6">
+                <i class="fa-solid fa-sparkles text-[#3b82f6]"></i>
+                <span>Built with Grok • Highest Quality</span>
+            </div>
+            
+            <h1 class="text-7xl font-bold tracking-tighter">Build apps with<br>natural language.</h1>
+            <p class="mt-4 text-2xl text-slate-400 max-w-2xl mx-auto">The most powerful AI app builder. Powered by Grok.</p>
+        </div>
+
+        <!-- Prompt Input -->
+        <div class="max-w-3xl mx-auto mb-10">
+            <div class="glass rounded-3xl p-2 border border-slate-600">
+                <div class="flex items-center gap-x-3 px-5 py-2">
+                    <i class="fa-solid fa-magic text-[#3b82f6] text-xl"></i>
+                    <input id="prompt-input" type="text" 
+                           class="prompt-input flex-1 bg-transparent text-lg placeholder:text-slate-400 focus:outline-none"
+                           placeholder="Build a beautiful SaaS dashboard with real-time charts...">
+                    
+                    <button onclick="generateApp()" 
+                            class="px-8 py-3.5 bg-[#3b82f6] hover:bg-blue-500 text-white font-semibold rounded-2xl flex items-center gap-x-2 transition-all active:scale-[0.985]">
+                        <span>Generate with Grok</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-2 mt-5">
+                <div onclick="useExample(this)" class="cursor-pointer text-xs px-4 py-1.5 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors">SaaS landing page</div>
+                <div onclick="useExample(this)" class="cursor-pointer text-xs px-4 py-1.5 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors">Todo app with dark mode</div>
+                <div onclick="useExample(this)" class="cursor-pointer text-xs px-4 py-1.5 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors">Weather dashboard</div>
+                <div onclick="useExample(this)" class="cursor-pointer text-xs px-4 py-1.5 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors">Modern portfolio</div>
+            </div>
+        </div>
+
+        <!-- History -->
+        <div class="mt-16">
+            <div class="flex items-center justify-between mb-6 px-1">
+                <div>
+                    <div class="section-title">YOUR BUILDS</div>
+                    <div class="text-2xl font-semibold">Recent Creations</div>
+                </div>
+                <button onclick="clearHistory()" class="text-sm text-slate-400 hover:text-white">Clear all</button>
+            </div>
+            
+            <div id="apps-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Generation Modal -->
+    <div id="generation-modal" onclick="closeModal()" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+        <div onclick="event.stopImmediatePropagation()" class="glass w-full max-w-md rounded-3xl p-8 border border-slate-600">
+            <div class="flex items-center gap-x-4 mb-8">
+                <div class="w-12 h-12 bg-[#3b82f6] rounded-2xl flex items-center justify-center">
+                    <i class="fa-solid fa-magic text-white text-2xl"></i>
+                </div>
+                <div>
+                    <div class="font-semibold text-xl">Generating with Grok</div>
+                    <div class="text-sm text-slate-400">Creating highest quality app...</div>
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-2 h-2 bg-[#3b82f6] rounded-full animate-pulse"></div>
+                    <span class="text-sm">Analyzing your requirements...</span>
+                </div>
+                <div class="flex items-center gap-x-3">
+                    <div class="w-2 h-2 bg-[#3b82f6] rounded-full animate-pulse"></div>
+                    <span class="text-sm">Designing beautiful UI...</span>
+                </div>
+                <div class="flex items-center gap-x-3">
+                    <div class="w-2 h-2 bg-[#3b82f6] rounded-full animate-pulse"></div>
+                    <span class="text-sm">Writing clean production code...</span>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-xs text-center text-slate-400">This will open Grok to generate your app</div>
+        </div>
+    </div>
+
+    <script>
+        let history = JSON.parse(localStorage.getItem('ptblock-history') || '[]');
+        
+        function useExample(element) {
+            document.getElementById('prompt-input').value = element.textContent;
+            document.getElementById('prompt-input').focus();
+        }
+        
+        function generateApp() {
+            const prompt = document.getElementById('prompt-input').value.trim();
+            if (!prompt) {
+                alert("Please describe the app you want to build");
+                return;
+            }
+            
+            const modal = document.getElementById('generation-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+                showGrokPrompt(prompt);
+            }, 2400);
+        }
+        
+        function showGrokPrompt(userPrompt) {
+            const optimizedPrompt = `You are an expert frontend developer. Create a beautiful, modern, production-ready single-file HTML app based on this description:
+
+"${userPrompt}"
+
+Requirements:
+- Use Tailwind CSS via CDN
+- Clean, modern, professional design
+- Fully responsive
+- Include nice interactions and animations
+- High attention to detail and polish
+- Use modern UI patterns
+
+Return ONLY the complete HTML code.`;
+            
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/90 flex items-center justify-center z-[100] p-6';
+            modal.innerHTML = `
+                <div class="glass w-full max-w-2xl rounded-3xl border border-slate-600 overflow-hidden">
+                    <div class="px-8 py-6 border-b border-slate-600 flex items-center justify-between">
+                        <div>
+                            <div class="font-semibold text-xl">Ready for Grok</div>
+                            <div class="text-sm text-slate-400">Copy this prompt and paste it in chat</div>
+                        </div>
+                        <button onclick="this.closest('.fixed').remove()" class="text-slate-400 hover:text-white text-2xl">×</button>
+                    </div>
+                    
+                    <div class="p-8">
+                        <div class="bg-slate-900 border border-slate-700 rounded-2xl p-6 text-sm font-mono text-slate-300 max-h-80 overflow-auto whitespace-pre-wrap">${optimizedPrompt}</div>
+                        
+                        <div class="flex gap-4 mt-6">
+                            <button onclick="copyPromptAndClose(this)" class="flex-1 py-4 bg-[#3b82f6] hover:bg-blue-500 text-white font-semibold rounded-2xl flex items-center justify-center gap-x-2">
+                                <i class="fa-solid fa-copy"></i>
+                                <span>Copy Prompt</span>
+                            </button>
+                            <button onclick="this.closest('.fixed').remove()" class="px-8 py-4 bg-slate-700 hover:bg-slate-600 rounded-2xl font-medium">Close</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            addToHistory(userPrompt);
+        }
+        
+        function copyPromptAndClose(button) {
+            const promptText = button.closest('.glass').querySelector('.bg-slate-900').textContent;
+            navigator.clipboard.writeText(promptText).then(() => {
+                button.innerHTML = `<i class="fa-solid fa-check"></i> <span>Copied! Now paste in chat</span>`;
+                setTimeout(() => {
+                    button.closest('.fixed').remove();
+                    alert("Prompt copied! Paste it in this chat and I'll generate the full app for you.");
+                }, 1200);
+            });
+        }
+        
+        function addToHistory(prompt) {
+            const app = {
+                id: Date.now(),
+                prompt: prompt,
+                timestamp: new Date().toISOString()
+            };
+            
+            history.unshift(app);
+            if (history.length > 6) history.pop();
+            
+            localStorage.setItem('ptblock-history', JSON.stringify(history));
+            renderHistory();
+        }
+        
+        function renderHistory() {
+            const container = document.getElementById('apps-grid');
+            container.innerHTML = '';
+            
+            if (history.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-3 text-center py-12 text-slate-400">
+                        <i class="fa-solid fa-magic text-4xl mb-4 opacity-50"></i>
+                        <div>Your generated apps will appear here</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            history.forEach(app => {
+                const div = document.createElement('div');
+                div.className = `app-card glass rounded-3xl p-6 border border-slate-600 cursor-pointer`;
+                div.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="font-semibold text-lg line-clamp-2">${app.prompt}</div>
+                            <div class="text-xs text-slate-400 mt-3">${new Date(app.timestamp).toLocaleDateString()}</div>
+                        </div>
+                        <div class="text-[#3b82f6]">
+                            <i class="fa-solid fa-check-circle"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 flex items-center justify-between">
+                        <div class="text-xs px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full">Ready</div>
+                        <button onclick="event.stopImmediatePropagation(); regenerateApp('${app.prompt}')" class="text-xs text-[#3b82f6] hover:text-blue-400">Regenerate</button>
+                    </div>
+                `;
+                div.onclick = () => regenerateApp(app.prompt);
+                container.appendChild(div);
+            });
+        }
+        
+        function regenerateApp(prompt) {
+            document.getElementById('prompt-input').value = prompt;
+            generateApp();
+        }
+        
+        function showHistory() {
+            document.getElementById('apps-grid').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function clearHistory() {
+            if (confirm("Clear all build history?")) {
+                history = [];
+                localStorage.removeItem('ptblock-history');
+                renderHistory();
+            }
+        }
+        
+        function boot() {
+            renderHistory();
+            
+            setTimeout(() => {
+                document.getElementById('prompt-input').focus();
+            }, 800);
+            
+            console.log('%c✅ ptblock Creator Studio ready', 'color:#3b82f6');
+        }
+        
+        window.onload = boot;
+    </script>
+</body>
+</html>
