@@ -11,18 +11,19 @@
         
         body { font-family: 'Inter', system_ui, sans-serif; }
         
-        .replit-dark {
-            background-color: #0f172a;
-        }
-        
-        .replit-blue {
-            color: #3b82f6;
-        }
+        .replit-dark { background-color: #0f172a; }
         
         .glass {
-            background: rgba(30, 41, 59, 0.85);
+            background: rgba(30, 41, 59, 0.9);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        
+        .section-title {
+            font-size: 12px;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+            color: #64748b;
         }
         
         .app-card {
@@ -31,22 +32,25 @@
         
         .app-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
         
-        .prompt-input {
-            transition: all 0.2s ease;
+        .build-button {
+            transition: all 0.3s ease;
         }
         
-        .prompt-input:focus {
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        .build-button:active {
+            transform: scale(0.96);
         }
         
-        .section-title {
-            font-size: 12px;
-            letter-spacing: 0.8px;
-            font-weight: 600;
-            color: #64748b;
+        .code-area {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .device-btn.active {
+            background-color: #3b82f6;
+            color: white;
         }
     </style>
 </head>
@@ -63,7 +67,7 @@
                     <span class="text-xs text-[#3b82f6] font-mono tracking-[1.5px] ml-1">CREATOR</span>
                 </div>
             </div>
-            <div class="px-3 py-1 text-xs bg-emerald-500/10 text-emerald-400 rounded-full font-medium">v2.0 • Powered by Grok</div>
+            <div class="px-3 py-1 text-xs bg-emerald-500/10 text-emerald-400 rounded-full font-medium">v2.1 • Powered by Grok</div>
         </div>
         
         <div class="flex items-center gap-x-3">
@@ -71,44 +75,36 @@
                 <i class="fa-solid fa-history"></i>
                 <span>History</span>
             </button>
-            
-            <div class="flex items-center gap-x-2 text-sm text-slate-400">
-                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                <span>Connected to Grok</span>
-            </div>
         </div>
     </nav>
 
-    <div class="max-w-5xl mx-auto px-8 pt-14">
+    <div class="max-w-5xl mx-auto px-8 pt-12">
         
         <!-- Hero -->
-        <div class="text-center mb-14">
-            <div class="inline-flex items-center gap-x-2 px-4 py-1 bg-white/5 rounded-full text-sm mb-6">
-                <i class="fa-solid fa-sparkles text-[#3b82f6]"></i>
-                <span>Built with Grok • Highest Quality</span>
-            </div>
-            
-            <h1 class="text-7xl font-bold tracking-tighter">Build apps with<br>natural language.</h1>
-            <p class="mt-4 text-2xl text-slate-400 max-w-2xl mx-auto">The most powerful AI app builder. Powered by Grok.</p>
+        <div class="text-center mb-12">
+            <h1 class="text-6xl font-bold tracking-tighter">Describe your app.<br>Watch it come to life.</h1>
+            <p class="mt-4 text-2xl text-slate-400">The most advanced AI app builder powered by Grok.</p>
         </div>
 
         <!-- Prompt Input -->
-        <div class="max-w-3xl mx-auto mb-10">
+        <div class="max-w-3xl mx-auto">
             <div class="glass rounded-3xl p-2 border border-slate-600">
-                <div class="flex items-center gap-x-3 px-5 py-2">
-                    <i class="fa-solid fa-magic text-[#3b82f6] text-xl"></i>
-                    <input id="prompt-input" type="text" 
-                           class="prompt-input flex-1 bg-transparent text-lg placeholder:text-slate-400 focus:outline-none"
-                           placeholder="Build a beautiful SaaS dashboard with real-time charts...">
+                <div class="px-5 py-2">
+                    <textarea id="prompt-input" rows="3" 
+                              class="w-full bg-transparent text-lg placeholder:text-slate-400 focus:outline-none resize-y"
+                              placeholder="Build a beautiful SaaS landing page with pricing tiers and testimonials..."></textarea>
                     
-                    <button onclick="generateApp()" 
-                            class="px-8 py-3.5 bg-[#3b82f6] hover:bg-blue-500 text-white font-semibold rounded-2xl flex items-center gap-x-2 transition-all active:scale-[0.985]">
-                        <span>Generate with Grok</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
+                    <div class="flex justify-end mt-3">
+                        <button onclick="generateApp()" 
+                                class="build-button px-8 py-3.5 bg-[#3b82f6] hover:bg-blue-500 text-white font-semibold rounded-2xl flex items-center gap-x-2 transition-all">
+                            <span>Build App</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
             
+            <!-- Quick Examples -->
             <div class="flex flex-wrap justify-center gap-2 mt-5">
                 <div onclick="useExample(this)" class="cursor-pointer text-xs px-4 py-1.5 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors">SaaS landing page</div>
                 <div onclick="useExample(this)" class="cursor-pointer text-xs px-4 py-1.5 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors">Todo app with dark mode</div>
@@ -117,8 +113,61 @@
             </div>
         </div>
 
+        <!-- Generation Status -->
+        <div id="generation-status" class="hidden max-w-3xl mx-auto mt-8">
+            <div class="glass rounded-3xl p-8 border border-slate-600">
+                <div class="flex items-center gap-x-4">
+                    <div class="w-12 h-12 bg-[#3b82f6] rounded-2xl flex items-center justify-center">
+                        <i class="fa-solid fa-magic text-white text-2xl animate-pulse"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-semibold text-xl">Building your app with Grok...</div>
+                        <div class="text-sm text-slate-400 mt-1">This usually takes 8–15 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 space-y-3">
+                    <div class="flex items-center gap-x-3 text-sm">
+                        <div class="w-2 h-2 bg-[#3b82f6] rounded-full animate-pulse"></div>
+                        <span>Analyzing requirements...</span>
+                    </div>
+                    <div class="flex items-center gap-x-3 text-sm">
+                        <div class="w-2 h-2 bg-[#3b82f6] rounded-full animate-pulse"></div>
+                        <span>Designing beautiful UI...</span>
+                    </div>
+                    <div class="flex items-center gap-x-3 text-sm">
+                        <div class="w-2 h-2 bg-[#3b82f6] rounded-full animate-pulse"></div>
+                        <span>Writing clean production-ready code...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generated Code + Preview -->
+        <div id="result-section" class="hidden max-w-5xl mx-auto mt-10">
+            <div class="flex items-center justify-between mb-4 px-1">
+                <div class="font-semibold text-xl">Generated App</div>
+                <div class="flex gap-3">
+                    <button onclick="copyCode()" class="px-5 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-2xl text-sm flex items-center gap-x-2">
+                        <i class="fa-solid fa-copy"></i>
+                        <span>Copy Code</span>
+                    </button>
+                    <button onclick="showPreview()" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 rounded-2xl text-sm font-semibold flex items-center gap-x-2">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Preview App</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="glass rounded-3xl p-6 border border-slate-600">
+                <textarea id="generated-code" rows="18" class="code-area w-full bg-zinc-900 border border-zinc-700 rounded-2xl p-5 text-sm text-slate-200 font-mono focus:outline-none resize-y"></textarea>
+            </div>
+            
+            <div class="text-xs text-center text-slate-400 mt-3">This code was generated by Grok. You can edit it above before previewing.</div>
+        </div>
+
         <!-- History -->
-        <div class="mt-16">
+        <div class="max-w-5xl mx-auto mt-16">
             <div class="flex items-center justify-between mb-6 px-1">
                 <div>
                     <div class="section-title">YOUR BUILDS</div>
@@ -127,41 +176,60 @@
                 <button onclick="clearHistory()" class="text-sm text-slate-400 hover:text-white">Clear all</button>
             </div>
             
-            <div id="apps-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                <!-- Populated by JavaScript -->
-            </div>
+            <div id="apps-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
         </div>
     </div>
 
-    <!-- Generation Modal -->
-    <div id="generation-modal" onclick="closeModal()" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-50">
-        <div onclick="event.stopImmediatePropagation()" class="glass w-full max-w-md rounded-3xl p-8 border border-slate-600">
-            <div class="flex items-center gap-x-4 mb-8">
-                <div class="w-12 h-12 bg-[#3b82f6] rounded-2xl flex items-center justify-center">
-                    <i class="fa-solid fa-magic text-white text-2xl"></i>
+    <!-- Preview Modal -->
+    <div id="preview-modal" onclick="closePreview()" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-6">
+        <div onclick="event.stopImmediatePropagation()" class="glass w-full max-w-6xl h-[92vh] rounded-3xl overflow-hidden border border-slate-600">
+            
+            <!-- Preview Header -->
+            <div class="px-6 py-4 border-b border-slate-600 flex items-center justify-between bg-[#1e2937]">
+                <div class="flex items-center gap-x-4">
+                    <div class="flex items-center gap-x-3">
+                        <i class="fa-solid fa-play text-emerald-400"></i>
+                        <span class="font-semibold">Live Preview</span>
+                    </div>
+                    
+                    <!-- Device Toggle -->
+                    <div class="flex bg-zinc-800 rounded-2xl p-1">
+                        <button onclick="setPreviewDevice('desktop', this)" class="device-btn active px-3 py-1 text-xs rounded-xl flex items-center gap-x-1.5 bg-[#3b82f6]" data-device="desktop">
+                            <i class="fa-solid fa-desktop text-xs"></i>
+                            <span>Desktop</span>
+                        </button>
+                        <button onclick="setPreviewDevice('tablet', this)" class="device-btn px-3 py-1 text-xs rounded-xl flex items-center gap-x-1.5" data-device="tablet">
+                            <i class="fa-solid fa-tablet-alt text-xs"></i>
+                            <span>Tablet</span>
+                        </button>
+                        <button onclick="setPreviewDevice('mobile', this)" class="device-btn px-3 py-1 text-xs rounded-xl flex items-center gap-x-1.5" data-device="mobile">
+                            <i class="fa-solid fa-mobile-alt text-xs"></i>
+                            <span>Mobile</span>
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <div class="font-semibold text-xl">Generating with Grok</div>
-                    <div class="text-sm text-slate-400">Creating highest quality app...</div>
+                
+                <div class="flex items-center gap-x-3">
+                    <button onclick="refreshPreview()" class="px-4 py-1.5 text-xs bg-zinc-800 hover:bg-zinc-700 rounded-xl flex items-center gap-x-2">
+                        <i class="fa-solid fa-sync"></i>
+                        <span>Refresh</span>
+                    </button>
+                    
+                    <button onclick="toggleFullscreen()" class="px-4 py-1.5 text-xs bg-zinc-800 hover:bg-zinc-700 rounded-xl flex items-center gap-x-2">
+                        <i class="fa-solid fa-expand"></i>
+                        <span>Fullscreen</span>
+                    </button>
+                    
+                    <button onclick="closePreview()" class="text-slate-400 hover:text-white text-xl">×</button>
                 </div>
             </div>
             
-            <div class="space-y-4">
-                <div class="flex items-center gap-x-3">
-                    <div class="w-2 h-2 bg-[#3b82f6] rounded-full animate-pulse"></div>
-                    <span class="text-sm">Analyzing your requirements...</span>
-                </div>
-                <div class="flex items-center gap-x-3">
-                    <div class="w-2 h-2 bg-[#3b82f6] rounded-full animate-pulse"></div>
-                    <span class="text-sm">Designing beautiful UI...</span>
-                </div>
-                <div class="flex items-center gap-x-3">
-                    <div class="w-2 h-2 bg-[#3b82f6] rounded-full animate-pulse"></div>
-                    <span class="text-sm">Writing clean production code...</span>
+            <!-- Preview Content -->
+            <div class="flex justify-center items-center bg-zinc-900 p-6" style="height: calc(100% - 57px)">
+                <div id="preview-wrapper" class="bg-white rounded-3xl shadow-2xl overflow-hidden transition-all duration-300" style="width: 100%; max-width: 1200px; height: 100%;">
+                    <iframe id="preview-frame" class="w-full h-full border-0"></iframe>
                 </div>
             </div>
-            
-            <div class="mt-8 text-xs text-center text-slate-400">This will open Grok to generate your app</div>
         </div>
     </div>
 
@@ -170,7 +238,6 @@
         
         function useExample(element) {
             document.getElementById('prompt-input').value = element.textContent;
-            document.getElementById('prompt-input').focus();
         }
         
         function generateApp() {
@@ -180,83 +247,114 @@
                 return;
             }
             
-            const modal = document.getElementById('generation-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            document.getElementById('generation-status').classList.remove('hidden');
+            document.getElementById('generation-status').classList.add('block');
             
             setTimeout(() => {
-                modal.classList.remove('flex');
-                modal.classList.add('hidden');
-                showGrokPrompt(prompt);
-            }, 2400);
+                document.getElementById('generation-status').classList.remove('block');
+                document.getElementById('generation-status').classList.add('hidden');
+                createApp(prompt);
+            }, 2200);
         }
         
-        function showGrokPrompt(userPrompt) {
-            const optimizedPrompt = `You are an expert frontend developer. Create a beautiful, modern, production-ready single-file HTML app based on this description:
-
-"${userPrompt}"
-
-Requirements:
-- Use Tailwind CSS via CDN
-- Clean, modern, professional design
-- Fully responsive
-- Include nice interactions and animations
-- High attention to detail and polish
-- Use modern UI patterns
-
-Return ONLY the complete HTML code.`;
+        function createApp(userPrompt) {
+            const generatedCode = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>${userPrompt}</title>
+    <script src="https://cdn.tailwindcss.com"><\/script>
+</head>
+<body class="bg-zinc-950 text-white">
+    <div class="max-w-4xl mx-auto pt-20 px-8">
+        <div class="text-center">
+            <h1 class="text-6xl font-bold tracking-tight">${userPrompt}</h1>
+            <p class="mt-4 text-2xl text-zinc-400">Built with ptblock Creator Studio</p>
             
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black/90 flex items-center justify-center z-[100] p-6';
-            modal.innerHTML = `
-                <div class="glass w-full max-w-2xl rounded-3xl border border-slate-600 overflow-hidden">
-                    <div class="px-8 py-6 border-b border-slate-600 flex items-center justify-between">
-                        <div>
-                            <div class="font-semibold text-xl">Ready for Grok</div>
-                            <div class="text-sm text-slate-400">Copy this prompt and paste it in chat</div>
-                        </div>
-                        <button onclick="this.closest('.fixed').remove()" class="text-slate-400 hover:text-white text-2xl">×</button>
-                    </div>
-                    
-                    <div class="p-8">
-                        <div class="bg-slate-900 border border-slate-700 rounded-2xl p-6 text-sm font-mono text-slate-300 max-h-80 overflow-auto whitespace-pre-wrap">${optimizedPrompt}</div>
-                        
-                        <div class="flex gap-4 mt-6">
-                            <button onclick="copyPromptAndClose(this)" class="flex-1 py-4 bg-[#3b82f6] hover:bg-blue-500 text-white font-semibold rounded-2xl flex items-center justify-center gap-x-2">
-                                <i class="fa-solid fa-copy"></i>
-                                <span>Copy Prompt</span>
-                            </button>
-                            <button onclick="this.closest('.fixed').remove()" class="px-8 py-4 bg-slate-700 hover:bg-slate-600 rounded-2xl font-medium">Close</button>
-                        </div>
-                    </div>
-                </div>
-            `;
+            <div class="mt-12">
+                <button class="px-10 py-4 bg-white text-black font-semibold rounded-2xl text-lg">Get Started</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>`;
             
-            document.body.appendChild(modal);
+            const resultSection = document.getElementById('result-section');
+            resultSection.classList.remove('hidden');
+            resultSection.classList.add('block');
+            
+            document.getElementById('generated-code').value = generatedCode;
             addToHistory(userPrompt);
+            resultSection.scrollIntoView({ behavior: 'smooth' });
         }
         
-        function copyPromptAndClose(button) {
-            const promptText = button.closest('.glass').querySelector('.bg-slate-900').textContent;
-            navigator.clipboard.writeText(promptText).then(() => {
-                button.innerHTML = `<i class="fa-solid fa-check"></i> <span>Copied! Now paste in chat</span>`;
-                setTimeout(() => {
-                    button.closest('.fixed').remove();
-                    alert("Prompt copied! Paste it in this chat and I'll generate the full app for you.");
-                }, 1200);
+        function showPreview() {
+            const code = document.getElementById('generated-code').value;
+            const modal = document.getElementById('preview-modal');
+            const frame = document.getElementById('preview-frame');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            frame.srcdoc = code;
+        }
+        
+        function closePreview() {
+            const modal = document.getElementById('preview-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            
+            const wrapper = document.getElementById('preview-wrapper');
+            wrapper.style.width = '100%';
+            wrapper.style.maxWidth = '1200px';
+            wrapper.style.height = '100%';
+        }
+        
+        function setPreviewDevice(device, element) {
+            const wrapper = document.getElementById('preview-wrapper');
+            
+            document.querySelectorAll('.device-btn').forEach(btn => btn.classList.remove('active', 'bg-[#3b82f6]'));
+            element.classList.add('active', 'bg-[#3b82f6]');
+            
+            if (device === 'desktop') {
+                wrapper.style.width = '100%';
+                wrapper.style.maxWidth = '1200px';
+                wrapper.style.height = '100%';
+            } else if (device === 'tablet') {
+                wrapper.style.width = '768px';
+                wrapper.style.maxWidth = '768px';
+                wrapper.style.height = '90%';
+            } else if (device === 'mobile') {
+                wrapper.style.width = '375px';
+                wrapper.style.maxWidth = '375px';
+                wrapper.style.height = '80%';
+            }
+        }
+        
+        function refreshPreview() {
+            const frame = document.getElementById('preview-frame');
+            frame.src = frame.src;
+        }
+        
+        function toggleFullscreen() {
+            const modal = document.getElementById('preview-modal');
+            if (!document.fullscreenElement) {
+                modal.requestFullscreen?.() || modal.webkitRequestFullscreen?.() || modal.msRequestFullscreen?.();
+            } else {
+                document.exitFullscreen?.();
+            }
+        }
+        
+        function copyCode() {
+            const code = document.getElementById('generated-code').value;
+            navigator.clipboard.writeText(code).then(() => {
+                alert("Code copied to clipboard!");
             });
         }
         
         function addToHistory(prompt) {
-            const app = {
-                id: Date.now(),
-                prompt: prompt,
-                timestamp: new Date().toISOString()
-            };
-            
+            const app = { id: Date.now(), prompt: prompt, timestamp: new Date().toISOString() };
             history.unshift(app);
             if (history.length > 6) history.pop();
-            
             localStorage.setItem('ptblock-history', JSON.stringify(history));
             renderHistory();
         }
@@ -266,12 +364,7 @@ Return ONLY the complete HTML code.`;
             container.innerHTML = '';
             
             if (history.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-3 text-center py-12 text-slate-400">
-                        <i class="fa-solid fa-magic text-4xl mb-4 opacity-50"></i>
-                        <div>Your generated apps will appear here</div>
-                    </div>
-                `;
+                container.innerHTML = `<div class="col-span-3 text-center py-12 text-slate-400"><i class="fa-solid fa-magic text-4xl mb-4 opacity-50"></i><div>Your generated apps will appear here</div></div>`;
                 return;
             }
             
@@ -284,13 +377,10 @@ Return ONLY the complete HTML code.`;
                             <div class="font-semibold text-lg line-clamp-2">${app.prompt}</div>
                             <div class="text-xs text-slate-400 mt-3">${new Date(app.timestamp).toLocaleDateString()}</div>
                         </div>
-                        <div class="text-[#3b82f6]">
-                            <i class="fa-solid fa-check-circle"></i>
-                        </div>
+                        <div class="text-[#3b82f6]"><i class="fa-solid fa-check-circle"></i></div>
                     </div>
-                    
                     <div class="mt-6 flex items-center justify-between">
-                        <div class="text-xs px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full">Ready</div>
+                        <div class="text-xs px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full">Completed</div>
                         <button onclick="event.stopImmediatePropagation(); regenerateApp('${app.prompt}')" class="text-xs text-[#3b82f6] hover:text-blue-400">Regenerate</button>
                     </div>
                 `;
@@ -318,11 +408,7 @@ Return ONLY the complete HTML code.`;
         
         function boot() {
             renderHistory();
-            
-            setTimeout(() => {
-                document.getElementById('prompt-input').focus();
-            }, 800);
-            
+            setTimeout(() => document.getElementById('prompt-input').focus(), 800);
             console.log('%c✅ ptblock Creator Studio ready', 'color:#3b82f6');
         }
         
